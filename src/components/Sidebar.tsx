@@ -9,6 +9,8 @@ interface SidebarProps {
   completedTopics: string[];
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 export default function Sidebar({
@@ -17,7 +19,9 @@ export default function Sidebar({
   onSelectTopic,
   completedTopics,
   theme,
-  onToggleTheme
+  onToggleTheme,
+  isOpen = true,
+  onClose,
 }: SidebarProps) {
   const levels: { id: TopicLevel; name: string; color: string }[] = [
     { id: 'beginner', name: '01. Beginner Core', color: 'text-[#6B7280]' },
@@ -31,11 +35,26 @@ export default function Sidebar({
   };
 
   return (
-    <aside className="w-80 bg-[#15171C] border-r border-[#2A2D35] flex flex-col justify-between h-screen sticky top-0 shrink-0 z-20">
-      
+    <aside className={`fixed inset-y-0 left-0 z-30 w-80 bg-[#15171C] border-r border-[#2A2D35] flex flex-col justify-between h-screen shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] md:sticky md:top-0 md:static md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className="md:hidden p-4 flex items-center justify-between border-b border-[#2A2D35]">
+        <div className="flex items-center gap-2">
+          <BookOpen className="text-[#68A063] h-5 w-5 shrink-0" />
+          <h1 className="text-[#68A063] font-mono font-bold text-lg tracking-tighter">
+            NODE_UNDER_HOOD.sys
+          </h1>
+        </div>
+        <button
+          onClick={onClose}
+          className="px-3 py-2 rounded-md bg-[#15171C] border border-[#2A2D35] text-sm text-[#D1D5DB] hover:bg-[#1A1D23] transition"
+          aria-label="Close sidebar"
+        >
+          CLOSE
+        </button>
+      </div>
+
       {/* Brand & Progress Header */}
-      <div className="p-6 border-b border-[#2A2D35]">
-        <div className="flex items-center gap-2 mb-4">
+      <div className="p-6 border-b border-[#2A2D35] md:p-6">
+        <div className="hidden md:flex items-center gap-2 mb-4">
           <BookOpen className="text-[#68A063] h-5 w-5 shrink-0" />
           <h1 className="text-[#68A063] font-mono font-bold text-lg tracking-tighter">
             NODE_UNDER_HOOD.sys

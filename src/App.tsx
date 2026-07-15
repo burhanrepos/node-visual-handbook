@@ -7,6 +7,7 @@ export default function App() {
   const [selectedTopicId, setSelectedTopicId] = useState<string>(topics[0]?.id || '');
   const [completedTopics, setCompletedTopics] = useState<string[]>([]);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Load progress and theme preference from LocalStorage on mount
   useEffect(() => {
@@ -40,6 +41,15 @@ export default function App() {
 
   const handleSelectTopic = (id: string) => {
     setSelectedTopicId(id);
+    setSidebarOpen(false);
+  };
+
+  const handleToggleSidebar = () => {
+    setSidebarOpen((prev) => !prev);
+  };
+
+  const handleCloseSidebar = () => {
+    setSidebarOpen(false);
   };
 
   const handleToggleComplete = () => {
@@ -64,8 +74,15 @@ export default function App() {
   const currentTopic = topics.find((t) => t.id === selectedTopicId) || topics[0];
 
   return (
-    <div className="flex h-screen bg-[#0F1115] text-[#D1D5DB] font-sans transition-colors duration-200">
-      
+    <div className="flex flex-col md:flex-row h-screen bg-[#0F1115] text-[#D1D5DB] font-sans transition-colors duration-200">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-20 md:hidden"
+          onClick={handleCloseSidebar}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Group Left Sidebar */}
       <Sidebar
         topics={topics}
@@ -74,10 +91,24 @@ export default function App() {
         completedTopics={completedTopics}
         theme={theme}
         onToggleTheme={handleToggleTheme}
+        isOpen={sidebarOpen}
+        onClose={handleCloseSidebar}
       />
 
       {/* Main Learning Canvas Panel */}
       <main className="flex-1 overflow-y-auto">
+        <div className="md:hidden sticky top-0 z-20 bg-[#0F1115] border-b border-[#2A2D35] px-4 py-3 flex items-center justify-between">
+          <button
+            onClick={handleToggleSidebar}
+            className="px-3 py-2 rounded-md bg-[#15171C] border border-[#2A2D35] text-sm text-[#D1D5DB] hover:bg-[#1A1D23] transition"
+            aria-label="Open sidebar"
+          >
+            MENU
+          </button>
+          <div className="text-xs font-mono uppercase tracking-widest text-[#6B7280]">
+            {currentTopic?.title}
+          </div>
+        </div>
         {currentTopic ? (
           <TopicContent
             topic={currentTopic}
