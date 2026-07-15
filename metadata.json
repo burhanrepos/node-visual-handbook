@@ -1,0 +1,8 @@
+{
+  "name": "Node.js & Express Visual Handbook",
+  "description": "An interactive, animated handbook for mastering Node.js and Express fundamentals, runtime mechanics, and advanced architectures.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
